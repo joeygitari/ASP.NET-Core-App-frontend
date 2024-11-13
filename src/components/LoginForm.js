@@ -19,7 +19,7 @@ const LoginForm = () => {
         const jsonObject = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch("https://localhost:5221/api/Account/login", {
+            const response = await fetch("http://localhost:5220/api/Seminar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
