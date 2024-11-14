@@ -19,7 +19,7 @@ const LoginForm = () => {
         const jsonObject = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch("http://localhost:5220/api/Seminar", {
+            const response = await fetch("https://localhost:5230/api/Account/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,6 +33,7 @@ const LoginForm = () => {
                 toast.success("Login successful.", {
                     onClose: () => {
                         localStorage.setItem('userData', JSON.stringify(data.user));
+                        navigate("/seminars");
                     }
                 });
             }

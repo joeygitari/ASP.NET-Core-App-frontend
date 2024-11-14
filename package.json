@@ -23,6 +23,7 @@
     "emailjs-com": "^3.2.0",
     "faker": "^6.6.6",
     "flowbite": "^2.3.0",
+    "frontend": "file:",
     "html2canvas": "^1.4.1",
     "html2pdf": "^0.0.11",
     "html2pdf.js": "^0.10.1",

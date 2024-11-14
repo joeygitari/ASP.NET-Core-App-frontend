@@ -1,16 +1,16 @@
-import React, {useState, useEffect } from 'react';
+import React from 'react';
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { useNavigate, Link } from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
 import Logo from "../../assets/images/logo.png";
 
 const SeminarForm = () => {
-
+    const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const jsonObject = Object.fromEntries(formData.entries());
-
+    
         try {
             const response = await fetch("https://localhost:5230/api/Seminar/posttobc", {
                 method: "POST",
@@ -19,17 +19,27 @@ const SeminarForm = () => {
                 },
                 body: JSON.stringify(jsonObject),
             });
-            const data = await response.json();
-            if (data.error) {
-                toast.error(data.error);
+    
+            const isJson = response.headers.get("content-type")?.includes("application/json");
+            const data = isJson ? await response.json() : null;
+    
+            if (!response.ok) {
+                const errorMessage = data?.error || "Server responded with an error.";
+                toast.error(errorMessage);
             } else {
-                toast.success("Seminar added successfully.");
+                toast.success("Seminar added successfully, navigating to seminar list...", {
+                    onClose: () => {
+                        event.target.reset();
+                        navigate("/seminars");
+                    }
+                });
             }
         } catch (error) {
             console.error("Error:", error);
             toast.error("An error occurred. Please try again later.");
         }
     };
+    
 
     return (
         <>
@@ -103,9 +113,7 @@ const SeminarForm = () => {
                             </div>
                         </div>                          
                     </div>
-                    <div className="grid md:grid-cols-2 gap-[6rem] mt-[2rem]">
-                    </div>
-                </form>        
+                </form>  
             </div>
         </section>
         <ToastContainer

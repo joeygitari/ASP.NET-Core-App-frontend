@@ -44,7 +44,7 @@ const RegisterForm = () => {
                 toast.error("Passwords do not match");
                 return;
             }
-            const response = await fetch("https://localhost:5221/api/Account/register", {
+            const response = await fetch("https://localhost:5230/api/Account/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -58,6 +58,7 @@ const RegisterForm = () => {
                 toast.success("User registered successfully", {
                     onClose: () => {
                         localStorage.setItem('userData', JSON.stringify(data.user));
+                        navigate("/login");
                     }
                 });
             }
