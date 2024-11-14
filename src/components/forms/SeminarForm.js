@@ -10,12 +10,17 @@ const SeminarForm = () => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const jsonObject = Object.fromEntries(formData.entries());
-    
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            toast.error("Access denied. Please login first.");
+            return;
+        }
         try {
             const response = await fetch("https://localhost:5230/api/Seminar/posttobc", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(jsonObject),
             });

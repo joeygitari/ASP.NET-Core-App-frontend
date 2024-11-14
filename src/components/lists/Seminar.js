@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import {Link} from "react-router-dom";
 import Logo from "../../assets/images/logo.png";
-
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Seminar = () => {
     const [seminars, setSeminars] = useState([]);
@@ -13,9 +14,18 @@ const Seminar = () => {
     }, []);
     
     const fetchSeminars = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            toast.error("Access denied. Please login first.");
+            return;
+        }
         try {
             const response = await fetch("https://localhost:5230/api/Seminar", {
                 method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
             });
             if (response.ok) {
                 const data = await response.json();
@@ -69,12 +79,10 @@ const Seminar = () => {
                             return (
                                 <tr key={index}>
                                     <td className={classes}>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex flex-col">
-                                                <span className="font-poppins font-normal text-gray-700">
-                                                    {seminar.name || "Unnamed"}
-                                                </span>
-                                            </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-poppins font-normal text-gray-700">
+                                                {seminar.name || "Unnamed"}
+                                            </span>
                                         </div>
                                     </td>
                                     <td className={classes}>
@@ -90,6 +98,19 @@ const Seminar = () => {
                     </tbody>
                 </table>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Slide}
+            />
         </div>
     );
 };

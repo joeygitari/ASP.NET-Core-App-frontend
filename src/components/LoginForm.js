@@ -32,7 +32,8 @@ const LoginForm = () => {
             } else {
                 toast.success("Login successful.", {
                     onClose: () => {
-                        localStorage.setItem('userData', JSON.stringify(data.user));
+                        // localStorage.setItem('userData', JSON.stringify(data.user));
+                        localStorage.setItem('authToken', data.token);
                         navigate("/seminars");
                     }
                 });
