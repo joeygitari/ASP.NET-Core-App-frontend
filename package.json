@@ -40,6 +40,7 @@
     "react-select": "^5.8.0",
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
+    "uuid": "^11.0.3",
     "vercel": "^34.1.11",
     "web-vitals": "^2.1.4"
   },
