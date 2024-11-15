@@ -48,7 +48,7 @@ const Seminar = () => {
                 <div></div>
                 <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                     <a href="/seminars/new">
-                        <button className="flex items-center gap-3 bg-[#172048] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-900">
+                        <button className="flex items-center gap-3 bg-[#172048] text-[14px] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-900">
                             <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> 
                             Add new seminar
                         </button>
@@ -62,7 +62,7 @@ const Seminar = () => {
                             {TABLE_HEAD.map((head, index) => (
                                 <th
                                     key={index}
-                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50 text-[16px]"
                                 >
                                     <span className="font-poppins font-bold text-[#172048] opacity-70">
                                         {head}
@@ -80,14 +80,14 @@ const Seminar = () => {
                                 <tr key={index}>
                                     <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {seminar.name || "Unnamed"}
                                             </span>
                                         </div>
                                     </td>
                                     <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {seminar.seminar_Duration || "Unknown"}
                                             </span>
                                         </div>

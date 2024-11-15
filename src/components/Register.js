@@ -14,9 +14,9 @@ const Register = () => {
                         <p className="font-bold font-poppins py-4 text-[20px]">MyApp</p>
                     </Link>
 
-                    <p className="font-poppins font-bold text-[48px] text-[#172048] mt-[1rem]">Sign up</p>
+                    <p className="font-poppins font-bold text-[40px] text-[#172048] mt-[1rem]">Sign up</p>
 
-                    <p className="font-poppins font-normal text-[18px] text-[#718096] mt-[2rem]">
+                    <p className="font-poppins font-normal text-[16px] text-[#718096] mt-[2rem]">
                         Already have an account? <Link to="/login" className="text-[#000039] font-medium underline hover:no-underline">Sign in</Link>
                     </p>
 

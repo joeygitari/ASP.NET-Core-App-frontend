@@ -47,21 +47,21 @@ const LoginForm = () => {
     return (
         <form className="max-w-xl mt-[2rem]" onSubmit={handleSubmit} noValidate>
             <div className="mb-5">
-                <label htmlFor="username" className="block mb-2 text-[18px] font-poppins font-medium text-[#718096]">
+                <label htmlFor="username" className="block mb-2 text-[16px] font-poppins font-medium text-[#718096]">
                     Username
                 </label>
                 <input type="username" id="username" autoComplete="off" name="username"
-                       className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[16px] rounded-[12px] w-full p-3"
+                       className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[14px] rounded-[12px] w-full p-3"
                        placeholder="Enter your username" required/>
             </div>
 
             <div className="mb-5">
-                <label htmlFor="password" className="block mb-2 text-[18px] font-poppins font-medium text-[#718096]">
+                <label htmlFor="password" className="block mb-2 text-[16px] font-poppins font-medium text-[#718096]">
                     Password
                 </label>
                 <div className="relative">
                     <input type={showPassword ? "text" : "password"} id="password" name="password"
-                        className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[16px] rounded-[12px] w-full p-3"
+                        className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[14px] rounded-[12px] w-full p-3"
                         placeholder="Enter your password"
                         required
                         />
@@ -79,7 +79,7 @@ const LoginForm = () => {
             </div>
 
             <button type="submit"
-                className="mt-[1.5rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[20px] w-full px-5 py-2.5 text-center">
+                className="mt-[1.5rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[18px] w-full px-5 py-2.5 text-center">
                 Sign in
             </button>
             <ToastContainer

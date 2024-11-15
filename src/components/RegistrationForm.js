@@ -71,42 +71,42 @@ const RegisterForm = () => {
     return (
     <form className="max-w-xl mt-[2rem]" onSubmit={handleSubmit} noValidate>
         <div className="mb-5">
-            <label htmlFor="username" className="block mb-2 text-[18px] font-poppins font-medium text-[#718096]">
+            <label htmlFor="username" className="block mb-2 text-[16px] font-poppins font-medium text-[#718096]">
                 Username <span className="text-red-500">*</span>
             </label>
             <input
                 type="text"
                 id="username"
                 autoComplete="off"
-                className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[16px] rounded-[12px] w-full p-3"
+                className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[14px] rounded-[12px] w-full p-3"
                 name="username"
                 placeholder="Enter username"
                 required
             />
         </div>
         <div className="mb-5">
-            <label htmlFor="email" className="block mb-2 text-[18px] font-poppins font-medium text-[#718096]">
+            <label htmlFor="email" className="block mb-2 text-[16px] font-poppins font-medium text-[#718096]">
                 E-mail <span className="text-red-500">*</span>
             </label>
             <input
                 type="email"
                 id="email"
                 autoComplete="off"
-                className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[16px] rounded-[12px] w-full p-3"
+                className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[14px] rounded-[12px] w-full p-3"
                 name="email"
                 placeholder="Enter email"
                 required
             />
         </div>
         <div className="mb-5">
-            <label htmlFor="password" className="block mb-2 text-[18px] font-poppins font-medium text-[#718096]">
+            <label htmlFor="password" className="block mb-2 text-[16px] font-poppins font-medium text-[#718096]">
                 Password <span className="text-red-500">*</span>
             </label>
             <div className="relative">
                 <input
                     type={showPassword ? "text" : "password"}
                     id="password"
-                    className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[16px] rounded-[12px] w-full p-3"
+                    className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[14px] rounded-[12px] w-full p-3"
                     placeholder="Enter password"
                     name="password"
                     required
@@ -124,7 +124,7 @@ const RegisterForm = () => {
             </div>
         </div>
         <div className="mb-5">
-            <label htmlFor="confirmPassword" className="block mb-2 text-[18px] font-poppins font-medium text-[#718096]">
+            <label htmlFor="confirmPassword" className="block mb-2 text-[16px] font-poppins font-medium text-[#718096]">
                 Confirm Password <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -132,7 +132,7 @@ const RegisterForm = () => {
                     type={showRepeatPassword ? "text" : "password"}
                     id="confirmPassword"
                     name="confirmPassword"
-                    className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[16px] rounded-[12px] w-full p-3"
+                    className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[14px] rounded-[12px] w-full p-3"
                     placeholder="Repeat password"
                     required
                 />
@@ -150,7 +150,7 @@ const RegisterForm = () => {
         </div>
         <button
             type="submit"
-            className="mt-[2rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[20px] w-full px-5 py-2.5 text-center"
+            className="mt-[2rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[18px] w-full px-5 py-2.5 text-center"
         >
             Register User
         </button>

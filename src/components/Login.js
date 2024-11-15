@@ -14,9 +14,9 @@ const Login = () => {
                         <p className="font-bold font-poppins py-4 text-[20px]">MyApp</p>
                     </Link>
 
-                    <p className="font-poppins font-bold text-[48px] text-[#172048] mt-[2rem]">Sign in</p>
+                    <p className="font-poppins font-bold text-[40px] text-[#172048] mt-[2rem]">Sign in</p>
 
-                    <p className="font-poppins font-normal text-[18px] text-[#718096] mt-[2rem]">
+                    <p className="font-poppins font-normal text-[16px] text-[#718096] mt-[2rem]">
                         Don't have an account? <Link to="/register" className="text-[#000039] font-medium underline hover:no-underline">Create now</Link>
                     </p>
 
