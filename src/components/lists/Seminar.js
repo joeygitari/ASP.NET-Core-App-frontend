@@ -88,7 +88,8 @@ const Seminar = () => {
     const handleDeleteConfirm = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await fetch(`https://localhost:5230/api/Seminar/${selectedSeminar.id}`, {
+            const guid = uuidv4();
+            const response = await fetch(`https://localhost:5230/api/Seminar/${guid}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
