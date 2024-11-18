@@ -92,8 +92,10 @@ const Seminar = () => {
             const response = await fetch(`https://localhost:5230/api/Seminar/${guid}`, {
                 method: "DELETE",
                 headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
+                body: JSON.stringify({ docNo: selectedSeminar.no }),
             });
             if (response.ok) {
                 toast.success("Seminar deleted successfully!");
