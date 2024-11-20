@@ -13,6 +13,7 @@ const Seminar = () => {
     const [editedName, setEditedName] = useState("");
     const [editedDuration, setEditedDuration] = useState("");
     const TABLE_HEAD = ["Seminar Name", "Seminar Duration", "Action"];
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchSeminars();
@@ -61,6 +62,7 @@ const Seminar = () => {
 
     const handleEditSave = async () => {
         try {
+            setLoading(true);
             const token = localStorage.getItem("authToken");
             const guid = uuidv4();
             const response = await fetch(`https://localhost:5230/api/Seminar/${guid}`, {
@@ -72,6 +74,7 @@ const Seminar = () => {
                 body: JSON.stringify({ docNo: selectedSeminar.no, name: editedName, seminar_Duration: editedDuration }),
             });
             if (response.ok) {
+                setLoading(false);
                 toast.success("Seminar updated successfully!");
                 setEditModalOpen(false);
                 fetchSeminars();
@@ -79,12 +82,14 @@ const Seminar = () => {
                 toast.error("Failed to update seminar.");
             }
         } catch (error) {
+            setLoading(false);
             toast.error("An error occurred while updating.");
         }
     };
 
     const handleDeleteConfirm = async () => {
         try {
+            setLoading(true);
             const token = localStorage.getItem("authToken");
             const guid = uuidv4();
             const response = await fetch(`https://localhost:5230/api/Seminar/${guid}`, {
@@ -96,6 +101,7 @@ const Seminar = () => {
                 body: JSON.stringify({ docNo: selectedSeminar.no }),
             });
             if (response.ok) {
+                setLoading(false);
                 toast.success("Seminar deleted successfully!");
                 setDeleteModalOpen(false);
                 fetchSeminars();
@@ -103,6 +109,7 @@ const Seminar = () => {
                 toast.error("Failed to delete seminar.");
             }
         } catch (error) {
+            setLoading(false);
             toast.error("An error occurred while deleting.");
         }
     };
@@ -212,7 +219,9 @@ const Seminar = () => {
                             onChange={(e) => setEditedDuration(e.target.value)}
                             placeholder="Seminar Duration"
                         />
-                        <button onClick={handleEditSave} className="bg-[#4169e1] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Save</button>
+                        <button onClick={handleEditSave} disabled={loading} className="bg-[#4169e1] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">
+                            {loading ? "Updating..." : "Save"}
+                        </button>
                         <button onClick={() => setEditModalOpen(false)} className="ml-5 bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Cancel</button>
                     </div>
                 </div>
@@ -224,7 +233,9 @@ const Seminar = () => {
                     <div className="bg-white p-6 rounded-lg shadow-lg">
                         <h2 className="text-lg font-poppins font-bold mb-4">Confirm Delete</h2>
                         <p className="block mb-2 text-[14px] font-poppins font-medium text-[#718096]">Are you sure you want to delete this seminar?</p>
-                        <button onClick={handleDeleteConfirm} className="bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Yes, Delete</button>
+                        <button onClick={handleDeleteConfirm} disabled={loading} className="bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">
+                            {loading ? "Deleting..." : "Yes, Delete"}
+                        </button>
                         <button onClick={() => setDeleteModalOpen(false)} className="ml-20 bg-[#718096] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Cancel</button>
                     </div>
                 </div>
