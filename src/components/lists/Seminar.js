@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { UserPlusIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
-import Logo from "../../assets/images/logo.png";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { v4 as uuidv4 } from 'uuid';
-
+import NavBar from '../NavBar';
 const Seminar = () => {
     const [seminars, setSeminars] = useState([]);
     const [openDropdown, setOpenDropdown] = useState(null);
@@ -111,11 +109,8 @@ const Seminar = () => {
 
     return (
         <div className="h-full w-full rounded-lg shadow-lg">
+            <NavBar />
             <div className="rounded-none mb-8 flex items-center justify-between gap-8 p-10">
-                <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
-                    <img className="h-16" alt="Logo" src={Logo} />
-                    <p className="font-bold font-poppins py-4 text-[20px]">MyApp</p>
-                </Link>
                 <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                     <a href="/seminars/new">
                         <button className="flex items-center gap-3 bg-[#172048] text-[14px] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-900">
@@ -202,23 +197,23 @@ const Seminar = () => {
             {editModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-lg font-bold mb-4">Edit Seminar</h2>
+                        <h2 className="text-lg font-poppins font-bold mb-4">Edit Seminar</h2>
                         <input
-                            className="border p-2 w-full mb-4"
+                            className="bg-[#F7FAFC] font-poppins font-normal rounded-[12px] border p-2 w-full mb-4"
                             type="text"
                             value={editedName}
                             onChange={(e) => setEditedName(e.target.value)}
                             placeholder="Seminar Name"
                         />
                         <input
-                            className="border p-2 w-full mb-4"
+                            className="bg-[#F7FAFC] font-poppins font-normal rounded-[12px] border p-2 w-full mb-4"
                             type="text"
                             value={editedDuration}
                             onChange={(e) => setEditedDuration(e.target.value)}
                             placeholder="Seminar Duration"
                         />
-                        <button onClick={handleEditSave} className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                        <button onClick={() => setEditModalOpen(false)} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                        <button onClick={handleEditSave} className="bg-[#4169e1] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Save</button>
+                        <button onClick={() => setEditModalOpen(false)} className="ml-5 bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Cancel</button>
                     </div>
                 </div>
             )}
@@ -227,14 +222,15 @@ const Seminar = () => {
             {deleteModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-                        <p>Are you sure you want to delete this seminar?</p>
-                        <button onClick={handleDeleteConfirm} className="bg-red-500 text-white px-4 py-2 rounded">Yes, Delete</button>
-                        <button onClick={() => setDeleteModalOpen(false)} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                        <h2 className="text-lg font-poppins font-bold mb-4">Confirm Delete</h2>
+                        <p className="block mb-2 text-[14px] font-poppins font-medium text-[#718096]">Are you sure you want to delete this seminar?</p>
+                        <button onClick={handleDeleteConfirm} className="bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Yes, Delete</button>
+                        <button onClick={() => setDeleteModalOpen(false)} className="ml-20 bg-[#718096] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Cancel</button>
                     </div>
                 </div>
             )}
             <ToastContainer
+                font="poppins"
                 position="top-right"
                 autoClose={10000}
                 hideProgressBar={false}

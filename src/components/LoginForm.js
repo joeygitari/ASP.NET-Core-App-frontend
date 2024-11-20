@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -19,6 +20,7 @@ const LoginForm = () => {
         const jsonObject = Object.fromEntries(formData.entries());
 
         try {
+            setLoading(true);
             const response = await fetch("https://localhost:5230/api/Account/login", {
                 method: "POST",
                 headers: {
@@ -30,6 +32,7 @@ const LoginForm = () => {
             if (data.error) {
                 toast.error(data.error);
             } else {
+                setLoading(false);
                 toast.success("Login successful.", {
                     onClose: () => {
                         // localStorage.setItem('userData', JSON.stringify(data.user));
@@ -39,6 +42,7 @@ const LoginForm = () => {
                 });
             }
         } catch (error) {
+            setLoading(false);
             console.error("Error:", error);
             toast.error("An error occurred. Please try again later.");
         }
@@ -78,9 +82,9 @@ const LoginForm = () => {
                 </div>
             </div>
 
-            <button type="submit"
+            <button type="submit" disabled={loading}
                 className="mt-[1.5rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[18px] w-full px-5 py-2.5 text-center">
-                Sign in
+                {loading ? "Signing in..." : "Sign in"}
             </button>
             <ToastContainer
                 position="top-right"

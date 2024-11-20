@@ -9,6 +9,7 @@ const RegisterForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -21,6 +22,7 @@ const RegisterForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            setLoading(true);
             const form = event.target;
             const formData = new FormData(form);
             const jsonObject = Object.fromEntries(formData.entries());
@@ -55,6 +57,7 @@ const RegisterForm = () => {
             if (data.error) {
                 toast.error(data.error);
             } else {
+                setLoading(false);
                 toast.success("User registered successfully", {
                     onClose: () => {
                         localStorage.setItem('userData', JSON.stringify(data.user));
@@ -63,6 +66,7 @@ const RegisterForm = () => {
                 });
             }
         } catch (error) {
+            setLoading(false);
             console.error("Error:", error);
             toast.error("Failed to register user");
         }
@@ -149,10 +153,10 @@ const RegisterForm = () => {
             </div>
         </div>
         <button
-            type="submit"
+            type="submit" disabled={loading}
             className="mt-[2rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[18px] w-full px-5 py-2.5 text-center"
         >
-            Register User
+            {loading ? "Registering..." : "Register User"}
         </button>
         <ToastContainer
             position="top-right"
