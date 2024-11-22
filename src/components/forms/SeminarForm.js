@@ -23,6 +23,38 @@ const SeminarForm = () => {
         }
         return true;
     };
+    const checkDocNoExists = async (docNo, token) => {
+        try {
+            const response = await fetch("https://localhost:5230/api/Seminar", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+    
+            const isJson = response.headers.get("content-type")?.includes("application/json");
+            const data = isJson ? await response.json() : null;
+    
+            if (!response.ok) {
+                const errorMessage = data?.error || "Server responded with an error.";
+                toast.error(errorMessage);
+                return true;
+            }
+    
+            const existingSeminar = data.find(seminar => seminar.no === docNo);
+            if (existingSeminar) {
+                toast.error("Document number already exists.");
+                return true; // docNo exists
+            }
+    
+            return false; // docNo does not exist
+        } catch (error) {
+            console.error("Error checking docNo:", error);
+            toast.error("An error occurred while checking Document Number.");
+            return true; // Indicate an error occurred
+        }
+    };
     
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -36,6 +68,10 @@ const SeminarForm = () => {
             toast.error("Access denied. Please login first.");
             return;
         }
+
+        const docNoExists = await checkDocNoExists(jsonObject.docNo, token);
+        if (docNoExists) return;
+
         try {
             const response = await fetch("https://localhost:5230/api/Seminar/posttobc", {
                 method: "POST",

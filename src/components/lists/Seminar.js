@@ -12,7 +12,7 @@ const Seminar = () => {
     const [selectedSeminar, setSelectedSeminar] = useState(null);
     const [editedName, setEditedName] = useState("");
     const [editedDuration, setEditedDuration] = useState("");
-    const TABLE_HEAD = ["Seminar No.","Seminar Name", "Seminar Duration", "Seminar Price", "Action"];
+    const TABLE_HEAD = ["Seminar No.","Seminar Name", "Seminar Duration", "Action"];
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -171,13 +171,13 @@ const Seminar = () => {
                                             </span>
                                         </div>
                                     </td>
-                                    <td className={classes}>
+                                    {/* <td className={classes}>
                                         <div className="flex flex-col">
                                             <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {seminar.seminar_Price || "0.00"}
                                             </span>
                                         </div>
-                                    </td>
+                                    </td> */}
                                     <td className="p-4 flex align-left">
                                         <div className="relative">
                                             <button
