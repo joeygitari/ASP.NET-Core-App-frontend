@@ -241,7 +241,6 @@ const Seminar = () => {
                 </div>
             )}
             <ToastContainer
-                font="poppins"
                 position="top-right"
                 autoClose={10000}
                 hideProgressBar={false}
