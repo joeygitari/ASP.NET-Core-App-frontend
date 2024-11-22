@@ -6,10 +6,31 @@ import Logo from "../../assets/images/logo.png";
 
 const SeminarForm = () => {
     const navigate = useNavigate();
+    const validateForm = (formData) => {
+        const { docNo, name, minimum_Participants, maximum_Participants } = formData;
+
+        if (!docNo || !/^SEM-\d{5}$/.test(docNo)) {
+            toast.error("Document Number must follow the format SEM-00001.");
+            return false;
+        }
+        if (!name.trim()) {
+            toast.error("Name is required.");
+            return false;
+        }
+        if (minimum_Participants && maximum_Participants && +minimum_Participants > +maximum_Participants) {
+            toast.error("Minimum Participants cannot be greater than Maximum Participants.");
+            return false;
+        }
+        return true;
+    };
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const jsonObject = Object.fromEntries(formData.entries());
+
+        if (!validateForm(jsonObject)) return;
+
         const token = localStorage.getItem('authToken');
         if (!token) {
             toast.error("Access denied. Please login first.");

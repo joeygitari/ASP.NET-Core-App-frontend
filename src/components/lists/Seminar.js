@@ -12,7 +12,7 @@ const Seminar = () => {
     const [selectedSeminar, setSelectedSeminar] = useState(null);
     const [editedName, setEditedName] = useState("");
     const [editedDuration, setEditedDuration] = useState("");
-    const TABLE_HEAD = ["Seminar Name", "Seminar Duration", "Action"];
+    const TABLE_HEAD = ["Seminar No.","Seminar Name", "Seminar Duration", "Seminar Price", "Action"];
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -153,6 +153,13 @@ const Seminar = () => {
                                     <td className={classes}>
                                         <div className="flex flex-col">
                                             <span className="font-poppins font-normal text-gray-700 text-[14px]">
+                                                {seminar.no || "Unnamed"}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {seminar.name || "Unnamed"}
                                             </span>
                                         </div>
@@ -160,7 +167,14 @@ const Seminar = () => {
                                     <td className={classes}>
                                         <div className="flex flex-col">
                                             <span className="font-poppins font-normal text-gray-700 text-[14px]">
-                                                {seminar.seminar_Duration || "Unknown"}
+                                                {seminar.seminar_Duration || "0"}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
+                                                {seminar.seminar_Price || "0.00"}
                                             </span>
                                         </div>
                                     </td>
