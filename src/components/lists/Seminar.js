@@ -12,8 +12,10 @@ const Seminar = () => {
     const [selectedSeminar, setSelectedSeminar] = useState(null);
     const [editedName, setEditedName] = useState("");
     const [editedDuration, setEditedDuration] = useState("");
-    const TABLE_HEAD = ["Seminar No.","Seminar Name", "Seminar Duration", "Action"];
+    const TABLE_HEAD = ["Seminar No.","Seminar Name", "Seminar Duration", "Actions"];
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);  // State for current page
+    const [itemsPerPage] = useState(10);  // Items per page
 
     useEffect(() => {
         fetchSeminars();
@@ -44,6 +46,17 @@ const Seminar = () => {
         }
     };
 
+     // Get current seminars to display based on pagination
+     const indexOfLastSeminar = currentPage * itemsPerPage;
+     const indexOfFirstSeminar = indexOfLastSeminar - itemsPerPage;
+     const currentSeminars = seminars.slice(indexOfFirstSeminar, indexOfLastSeminar);
+ 
+     const totalPages = Math.ceil(seminars.length / itemsPerPage);
+ 
+     const handlePageChange = (pageNumber) => {
+         setCurrentPage(pageNumber);
+     };
+
     const toggleDropdown = (index) => {
         setOpenDropdown(openDropdown === index ? null : index);
     };
@@ -53,11 +66,13 @@ const Seminar = () => {
         setEditedName(seminar.name || "");
         setEditedDuration(seminar.seminar_Duration || "");
         setEditModalOpen(true);
+        setOpenDropdown(null)
     };
 
     const handleDeleteClick = (seminar) => {
         setSelectedSeminar(seminar);
         setDeleteModalOpen(true);
+        setOpenDropdown(null)
     };
 
     const handleEditSave = async () => {
@@ -115,26 +130,27 @@ const Seminar = () => {
     };
 
     return (
-        <div className="h-full w-full rounded-lg shadow-lg">
+        <div className="h-full w-full bg-[#F7FAFC] rounded-lg shadow-lg">
             <NavBar />
-            <div className="rounded-none mb-8 flex items-center justify-between gap-8 p-10">
-                <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                    <a href="/seminars/new">
-                        <button className="flex items-center gap-3 bg-[#172048] text-[14px] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-900">
-                            <UserPlusIcon strokeWidth={2} className="h-4 w-4" />
-                            Add new seminar
-                        </button>
-                    </a>
+           
+            <div className="max-w-4xl mx-auto bg-[#F7FAFC] p-2 rounded-lg shadow-lg">
+                <div className="rounded-none mb-8 flex items-center justify-between gap-8 p-10">
+                    <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                        <a href="/seminars/new">
+                            <button className="flex items-center gap-3 bg-[#172048] text-[14px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
+                                <UserPlusIcon strokeWidth={2} className="h-4 w-4" />
+                                Add new seminar
+                            </button>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div className="px-4">
-                <table className="mt-4 w-full min-w-max table-auto text-left">
+                <table className="w-full table-auto text-center">
                     <thead>
                         <tr>
                             {TABLE_HEAD.map((head, index) => (
                                 <th
                                     key={index}
-                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50 text-[16px]"
+                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-2 text-sm transition-colors hover:bg-blue-gray-50 text-[#172048] opacity-70"
                                 >
                                     <span className="font-poppins font-bold text-[#172048] opacity-70">
                                         {head}
@@ -144,9 +160,9 @@ const Seminar = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {seminars.map((seminar, index) => {
-                            const isLast = index === seminars.length - 1;
-                            const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+                        {currentSeminars.map((seminar, index) => {
+                            const isLast = index === currentSeminars.length - 1;
+                            const classes = isLast ? "p-2" : "p-2 border-b border-blue-gray-50";
 
                             return (
                                 <tr key={index}>
@@ -178,21 +194,21 @@ const Seminar = () => {
                                             </span>
                                         </div>
                                     </td> */}
-                                    <td className="p-4 flex align-left">
+                                    <td className={classes}>
                                         <div className="relative">
                                             <button
                                                 onClick={() => toggleDropdown(index)}
-                                                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+                                                className="bg-gray-100 rounded-full hover:bg-gray-200"
                                             >
                                                 <EllipsisVerticalIcon className="h-5 w-5 text-gray-700" />
                                             </button>
 
                                             {openDropdown === index && (
-                                                <div className="absolute right-0 top-0 w-32 mt-0 bg-white border border-[#172048] rounded-md shadow-lg">
+                                                <div className="absolute right-0 top-8 w-32 mt-0 z-10 bg-white border border-[#172048] rounded-md shadow-lg">
                                                     <ul className="text-sm text-gray-700">
                                                         <li
                                                             onClick={() => handleEditClick(seminar)}
-                                                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-poppins font-bold text-[#172048] opacity-70"
+                                                            className="border-b border-blue-gray-60 px-4 py-2 hover:bg-gray-100 cursor-pointer font-poppins font-bold text-[#172048] opacity-70"
                                                         >
                                                             Edit
                                                         </li>
@@ -212,6 +228,26 @@ const Seminar = () => {
                         })}
                     </tbody>
                 </table>
+                {/* <div className="flex justify-center items-center">
+                </div> */}
+                {/* Pagination Controls */}
+                <div className="flex justify-center items-center mt-5 p-2 gap-10">
+                    <button 
+                        onClick={() => handlePageChange(currentPage - 1)} 
+                        disabled={currentPage === 1} 
+                        className="bg-[#4169e1] opacity-70 text-white font-poppins px-5 py-2.5 rounded-[20px] text-sm"
+                    >
+                        Previous
+                    </button>
+                    <span className="font-poppins text-[#172048] text-[14px] px-5 py-2.5 opacity-70">{`Page ${currentPage} of ${totalPages}`}</span>
+                    <button 
+                        onClick={() => handlePageChange(currentPage + 1)} 
+                        disabled={currentPage === totalPages} 
+                        className="bg-[#4169e1] opacity-70 text-white font-poppins px-5 py-2.5 rounded-[20px] text-sm"
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
 
             {/* Edit Modal */}

@@ -1,18 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { useNavigate, Link } from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
 import Logo from "../../assets/images/logo.png";
 
 const SeminarForm = () => {
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const validateForm = (formData) => {
-        const { docNo, name, minimum_Participants, maximum_Participants } = formData;
-
-        if (!docNo || !/^SEM-\d{5}$/.test(docNo)) {
-            toast.error("Document Number must follow the format SEM-00001.");
-            return false;
-        }
+        const { name, minimum_Participants, maximum_Participants } = formData;
         if (!name.trim()) {
             toast.error("Name is required.");
             return false;
@@ -23,39 +19,7 @@ const SeminarForm = () => {
         }
         return true;
     };
-    const checkDocNoExists = async (docNo, token) => {
-        try {
-            const response = await fetch("https://localhost:5230/api/Seminar", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-    
-            const isJson = response.headers.get("content-type")?.includes("application/json");
-            const data = isJson ? await response.json() : null;
-    
-            if (!response.ok) {
-                const errorMessage = data?.error || "Server responded with an error.";
-                toast.error(errorMessage);
-                return true;
-            }
-    
-            const existingSeminar = data.find(seminar => seminar.no === docNo);
-            if (existingSeminar) {
-                toast.error("Document number already exists.");
-                return true; // docNo exists
-            }
-    
-            return false; // docNo does not exist
-        } catch (error) {
-            console.error("Error checking docNo:", error);
-            toast.error("An error occurred while checking Document Number.");
-            return true; // Indicate an error occurred
-        }
-    };
-    
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -69,10 +33,8 @@ const SeminarForm = () => {
             return;
         }
 
-        const docNoExists = await checkDocNoExists(jsonObject.docNo, token);
-        if (docNoExists) return;
-
         try {
+            setLoading(true);
             const response = await fetch("https://localhost:5230/api/Seminar/posttobc", {
                 method: "POST",
                 headers: {
@@ -89,6 +51,7 @@ const SeminarForm = () => {
                 const errorMessage = data?.error || "Server responded with an error.";
                 toast.error(errorMessage);
             } else {
+                setLoading(false);
                 toast.success("Seminar added successfully, navigating to seminar list...", {
                     onClose: () => {
                         event.target.reset();
@@ -97,6 +60,7 @@ const SeminarForm = () => {
                 });
             }
         } catch (error) {
+            setLoading(false);
             console.error("Error:", error);
             toast.error("An error occurred. Please try again later.");
         }
@@ -105,7 +69,21 @@ const SeminarForm = () => {
 
     return (
         <>
+        <nav className="bg-[#172048] text-white p-2 flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+                <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
+                    <img className="h-16" alt="Logo" src={Logo} />
+                    <p className="font-bold font-poppins py-4 text-[20px]">MyApp</p>
+                </Link>
+            </div>
+            <div>
+                <Link to="/seminars">
+                    <p className="font-medium underline font-poppins py-4 text-[14px] mr-8 ">back to seminars</p>
+                </Link>
+            </div>
+        </nav>
         <section className="bg-[#F7FAFC] flex items-center justify-center min-h-screen">
+       
             <div className="flex items-center justify-center p-8 max-w-2xl w-full">
                 <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
                     <form noValidate onSubmit={handleSubmit} className="space-y-6">
@@ -114,15 +92,6 @@ const SeminarForm = () => {
                                 <img className="h-16" alt="Logo" src={Logo}/>
                                 {/* <p className="font-bold font-poppins text-[20px]">MyApp</p> */}
                             </Link>
-                        </div>
-                        <div className="mb-5">
-                            <label htmlFor="docNo"
-                                className="block mb-2 text-[14px] font-poppins font-medium text-[#718096]">
-                                Document Number <span className="text-red-500">*</span>
-                            </label>
-                            <input type="text" id="docNo" autoComplete="off"
-                                className="bg-[#F7FAFC] border border-[#CBD5E0] font-poppins font-normal text-[#4A5568] text-[12px] rounded-[12px] w-full p-3"
-                                name="docNo" placeholder="Use the format SEM-00001" required />
                         </div>
                         <div className="mb-5">
                             <label htmlFor="name"
@@ -160,9 +129,9 @@ const SeminarForm = () => {
                             </div>       
                         </div>
                         <div>
-                            <button type="submit"
+                            <button type="submit" disabled={loading}
                                 className="mt-2 text-white bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[16px] w-full px-5 py-2.5 text-center">
-                                    Create
+                                    {loading ? "Creating..." : "Create"}
                             </button>
                         </div>
                     </form>  
