@@ -144,7 +144,7 @@ const Seminar = () => {
                         </a>
                     </div>
                 </div>
-                <table className="w-full table-auto text-center">
+                <table className="w-full table-auto text-left">
                     <thead>
                         <tr>
                             {TABLE_HEAD.map((head, index) => (

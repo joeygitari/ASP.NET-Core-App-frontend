@@ -14,10 +14,13 @@ const Navbar = () => {
     return (
         <nav className="bg-[#172048] text-white p-4 flex justify-between items-center">
             <div className="flex items-center space-x-3">
-                <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
+                <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer mr-16">
                     <img className="h-16" alt="Logo" src={Logo} />
                     <p className="font-bold font-poppins py-4 text-[20px]">MyApp</p>
                 </Link>
+                <Link to="/seminars" className="font-poppins text-[16px] text-[#F7FAFC] hover:text-[#4169e1] mr-10">Seminars</Link>
+                <Link to="/customers" className="font-poppins text-[16px] text-[#F7FAFC] hover:text-[#4169e1] mr-10">Customers</Link>
+                <Link to="/employees" className="font-poppins text-[16px] text-[#F7FAFC] hover:text-[#4169e1]">Employees</Link>
             </div>
             <div>
             {isLoggedIn ? (
