@@ -21,7 +21,7 @@ const LoginForm = () => {
 
         try {
             setLoading(true);
-            const response = await fetch("https://localhost:5230/api/Account/login", {
+            const response = await fetch("https://localhost:7232/api/Auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -29,14 +29,14 @@ const LoginForm = () => {
                 body: JSON.stringify(jsonObject),
             });
             const data = await response.json();
-            if (data.error) {
-                toast.error(data.error);
+            if (data.success === false) {
+                setLoading(false);
+                toast.error(data.message);
             } else {
                 setLoading(false);
                 toast.success("Login successful.", {
                     onClose: () => {
-                        // localStorage.setItem('userData', JSON.stringify(data.user));
-                        localStorage.setItem('authToken', data.token);
+                        localStorage.setItem('authToken', data.data.token);
                         navigate("/seminars");
                     }
                 });
@@ -77,14 +77,14 @@ const LoginForm = () => {
                                 top: '30%',
                                 cursor: 'pointer'
                             }}
-                                onClick={togglePasswordVisibility}
+                            onClick={togglePasswordVisibility}
                         />
                 </div>
             </div>
 
             <button type="submit" disabled={loading}
                 className="mt-[1.5rem] text-[#F7FAFC] bg-[#4169e1] h-14 font-poppins font-semibold rounded-[20px] text-[18px] w-full px-5 py-2.5 text-center">
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? "Logging you in..." : "Log in"}
             </button>
             <ToastContainer
                 position="top-right"

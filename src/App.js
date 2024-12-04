@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
-import Seminar from './components/lists/Seminar';
-import Customer from './components/lists/Customer';
-import Employee from './components/lists/Employee';
-import SeminarForm from './components/forms/SeminarForm';
-
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import Seminar from './components/seminars/Seminar';
+import Customer from './components/customers/Customer';
+import Employee from './components/employees/Employee';
+import SeminarForm from './components/seminars/SeminarForm';
+import Registrations from './components/seminars/registrations/Registrations';
 const App = () => {
   return (
     <Router>
@@ -18,6 +18,7 @@ const App = () => {
         <Route path="/seminars/new" element={<SeminarForm />} />
         <Route path="/customers" element={<Customer />} />
         <Route path="/employees" element={<Employee />} />
+        <Route path="/seminars/registrations" element={<Registrations />} />
       </Routes>
     </Router>
   );
