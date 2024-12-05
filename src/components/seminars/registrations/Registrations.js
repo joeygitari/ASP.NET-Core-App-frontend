@@ -102,31 +102,40 @@ const Registrations = () => {
             console.error("Error fetching contacts:", error);
         }
     };
+   
+    useEffect(() => {
+        if (selectedRegistration && selectedRegistration.no) {
+            const fetchParticipants = async () => {
+                const token = localStorage.getItem("authToken");
+                if (!token) {
+                    toast.error("Access denied. Please login first.");
+                    return;
+                }
+                try {
+                    setLoading(true);
+                    const response = await fetch(`https://localhost:7232/api/Seminar/MyRegistrations?headerNo=${selectedRegistration.no}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setParticipants(data.data);
+                        setLoading(false);
+                    } else {
+                        toast.error("Failed to fetch participants");
+                    }
+                } catch (error) {
+                    setLoading(false);
+                    toast.error("Error fetching participants");
+                }
+            };
 
-    const fetchParticipants= async () => {   
-        const token = localStorage.getItem("authToken");
-        try{
-            setLoading(true);
-
-            const response = await fetch(`https://localhost:7232/api/Seminar/MyRegistrations?headerNo=${selectedRegistration.no}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-            const data = await response.json();
-            if (data.success === false){
-                toast.error("Failed to fetch participants");
-            } else{
-                setLoading(false)
-                setParticipants(data.data);
-            }
-        } catch(error){
-            setLoading(false);
-            toast.error("Error fetching participants", error);
+            fetchParticipants();
         }
-    };
+    }, [selectedRegistration]);
 
     const indexOfLastRegistration = currentPage * itemsPerPage;
     const indexOfFirstRegistration = indexOfLastRegistration - itemsPerPage;
@@ -146,7 +155,7 @@ const Registrations = () => {
     const handleViewClick = (registration) => {
         setSelectedRegistration(registration);
         setViewModalOpen(true);
-        fetchParticipants();
+        // fetchParticipants();
     };
 
     const handleNewRegistration = async () => {
@@ -388,6 +397,7 @@ const Registrations = () => {
                     </button>
                     <button
                         type="button"
+                        onClick={() => setAddModalOpen(false)}
                         className="bg-red-500 text-white font-poppins font-semibold px-6 py-2.5 rounded-lg shadow hover:bg-red-600 transition"
                     >
                         Cancel
@@ -477,6 +487,16 @@ const Registrations = () => {
                         ))}
                     </tbody>
                 </table>
+                {loading && (
+                    <div className="flex justify-center items-center">
+                        <div 
+                            className="animate-spin rounded-full h-10 w-10 mt-10 mb-10 border-4 border-[#4169e1] border-t-transparent"
+                            role="status"
+                        >
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                )}
                 <div className="flex justify-end mt-6 space-x-3">
                     <button
                         type="button"
