@@ -112,7 +112,9 @@ const Registrations = () => {
                     return;
                 }
                 try {
+                    setParticipants([]);
                     setLoading(true);
+                    
                     const response = await fetch(`https://localhost:7232/api/Seminar/MyRegistrations?headerNo=${selectedRegistration.no}`, {
                         method: "GET",
                         headers: {
@@ -438,11 +440,11 @@ const Registrations = () => {
                                     Seminar Number
                                 </span>
                             </th> */}
-                            <th className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-2 text-sm transition-colors hover:bg-blue-gray-50 text-[#172048] opacity-70">
+                            {/* <th className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-2 text-sm transition-colors hover:bg-blue-gray-50 text-[#172048] opacity-70">
                                 <span className="font-poppins font-bold text-[#172048] opacity-70">
                                     Seminar Name
                                 </span>
-                            </th>
+                            </th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -476,13 +478,13 @@ const Registrations = () => {
                                     </span>
                                 </div>
                             </td> */}
-                            <td className="p-4 border-b border-blue-gray-50">
+                            {/* <td className="p-4 border-b border-blue-gray-50">
                                 <div className="flex flex-col">
                                     <span className="font-poppins font-normal text-gray-700 text-[12px]">
                                         {participant.seminarName}            
                                     </span>
                                 </div>
-                            </td>
+                            </td> */}
                         </tr>
                         ))}
                     </tbody>
