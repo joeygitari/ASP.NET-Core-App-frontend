@@ -5,8 +5,10 @@ import NavBar from '../../NavBar';
 
 const Registrations = () => {
     const [registrations, setRegistrations] = useState([]);
-    const TABLE_HEAD = ["Number", "Seminar Number", "Seminar Name", "Starting Date", "Status", "", ""];
+    const TABLE_HEAD = ["Number", "Seminar Number", "Seminar Name", "Starting Date", "", ""];
     const [loading, setLoading] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [isViewing, setIsViewing] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [selectedRegistration, setSelectedRegistration] = useState(null);
@@ -44,9 +46,9 @@ const Registrations = () => {
                 },
             });
             if (response.ok) {
-                setLoading(false);
                 const data = await response.json();
                 setRegistrations(data.data);
+                setLoading(false);
             } else {
                 toast.error("Failed to fetch registrations");
             }
@@ -113,7 +115,7 @@ const Registrations = () => {
                 }
                 try {
                     setParticipants([]);
-                    setLoading(true);
+                    setIsViewing(true);
                     
                     const response = await fetch(`https://localhost:7232/api/Seminar/MyRegistrations?headerNo=${selectedRegistration.no}`, {
                         method: "GET",
@@ -125,12 +127,12 @@ const Registrations = () => {
                     if (response.ok) {
                         const data = await response.json();
                         setParticipants(data.data);
-                        setLoading(false);
+                        setIsViewing(false);
                     } else {
                         toast.error("Failed to fetch participants");
                     }
                 } catch (error) {
-                    setLoading(false);
+                    setIsViewing(false);
                     toast.error("Error fetching participants");
                 }
             };
@@ -157,13 +159,14 @@ const Registrations = () => {
     const handleViewClick = (registration) => {
         setSelectedRegistration(registration);
         setViewModalOpen(true);
-        // fetchParticipants();
     };
 
     const handleNewRegistration = async () => {
-        // console.log(selectedRegistration);
         try{
-            setLoading(true);
+            setIsAdding(true);
+            setCustomers([]);
+            setContacts([]);
+            
             const token = localStorage.getItem("authToken");
             const response = await fetch(`https://localhost:7232/api/Seminar/Registration`, {
                 method: "POST",
@@ -180,15 +183,15 @@ const Registrations = () => {
             });
             const data = await response.json();
             if (data.success === false){
-                setLoading(false);
+                setIsAdding(false);
                 toast.error("Failed to register user");
             } else {
-                setLoading(false);
+                setIsAdding(false);
                 toast.success("Participant Registered successfully");
                 setAddModalOpen(false);
             }
         } catch(error){
-            setLoading(false);
+            setIsAdding(false);
             toast.error("An error occurred while updating");
         }
     };
@@ -200,7 +203,7 @@ const Registrations = () => {
             <div className="max-w-4xl mx-auto bg-[#F7FAFC] p-2 rounded-lg shadow-lg">
                 <div className="rounded-none flex items-center justify-between gap-8 p-10">
                     <div className="flex shrink-0 flex-col sm:flex-row">
-                        <span className="text-[20px] text-[#172048] font-poppins font-bold">Seminar Registrations</span>
+                        <span className="text-[20px] text-[#172048] font-poppins font-bold">Available Seminars</span>
                     </div>
                 </div>
                 <table className="w-full table-auto text-left">
@@ -227,45 +230,44 @@ const Registrations = () => {
                                 <tr key={index}>
                                     <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700 text-[12px]">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {registration.no || "Unknown"}
                                             </span>
                                         </div>
                                     </td>
                                     <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700 text-[12px]">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {registration.seminar_No || "Unknown"}
                                             </span>
                                         </div>
                                     </td>
                                     <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700 text-[12px]">
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {registration.seminar_Name || "Unnamed"}
                                             </span>
                                         </div>
                                     </td>
                                     <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700 text-[12px]">
-                                                {/* {registration.starting_Date || "Unknown"} */}
+                                            <span className="font-poppins font-normal text-gray-700 text-[14px]">
                                                 {registration.starting_Date 
                                                     ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(registration.starting_Date)) 
                                                     : "Unknown"}
                                             </span>
                                         </div>
                                     </td>
-                                    <td className={classes}>
+                                    {/* <td className={classes}>
                                         <div className="flex flex-col">
-                                            <span className="font-poppins font-normal text-gray-700 text-[12px]">
+                                            <span className="font-poppins font-normal text-gray-700 text-[13px]">
                                                 {registration.status || "Unknown"}
                                             </span>
                                         </div>
-                                    </td>
+                                    </td> */}
                                     <td className={classes}>
                                         {/* <a href="#"> */}
-                                            <button onClick={() => handleNewClick(registration)} className="flex items-center gap-1 bg-[#4169e1] text-[12px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
+                                            <button onClick={() => handleNewClick(registration)} className="flex items-center gap-1 bg-[#4169e1] text-[13px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
                                                 {/* <PlusIcon strokeWidth={1} className="h-4 w-4" /> */}
                                                 New Registration
                                             </button>
@@ -273,7 +275,7 @@ const Registrations = () => {
                                     </td>
                                     <td className={classes}>
                                         {/* <a href="#"> */}
-                                            <button onClick={() => handleViewClick(registration)}  className="flex items-center gap-3 bg-[#4169e1] text-[12px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
+                                            <button onClick={() => handleViewClick(registration)}  className="flex items-center gap-3 bg-[#4169e1] text-[13px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
                                                 View Participants
                                             </button>
                                         {/* </a> */}
@@ -391,11 +393,11 @@ const Registrations = () => {
 
                     <div className="flex justify-end mt-6 space-x-3">
                     <button
-                        disabled={loading}
+                        disabled={isAdding}
                         onClick={handleNewRegistration}
                         className="bg-blue-600 text-white font-poppins font-semibold px-6 py-2.5 rounded-lg shadow hover:bg-blue-700 transition disabled:opacity-50"
                     >
-                        {loading ? "Registering..." : "Add"}
+                        {isAdding ? "Registering..." : "Add"}
                     </button>
                     <button
                         type="button"
@@ -489,7 +491,7 @@ const Registrations = () => {
                         ))}
                     </tbody>
                 </table>
-                {loading && (
+                {isViewing && (
                     <div className="flex justify-center items-center">
                         <div 
                             className="animate-spin rounded-full h-10 w-10 mt-10 mb-10 border-4 border-[#4169e1] border-t-transparent"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/images/logo.png";
 
+// #4b8bc3, #145c9c, #233741
 const Navbar = () => {
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem("authToken");

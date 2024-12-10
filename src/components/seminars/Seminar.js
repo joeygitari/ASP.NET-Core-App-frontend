@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { UserPlusIcon, EllipsisVerticalIcon, BriefcaseIcon } from "@heroicons/react/24/solid";
 import { ToastContainer, toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css"; 
 import NavBar from '../NavBar';
-
 
 const Seminar = () => {
     const [seminars, setSeminars] = useState([]);
@@ -19,6 +18,9 @@ const Seminar = () => {
     const [editedBlocked, setEditedBlocked] = useState(false);
     const TABLE_HEAD = ["Seminar No.","Seminar Name", "Seminar Duration", "Seminar Price", "Gen Prod Posting Group", "VAT Prod Posting Group", "Actions"];
     const [loading, setLoading] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
 
@@ -47,12 +49,10 @@ const Seminar = () => {
                 },
             });
             if (response.ok) {
-                setLoading(false);
                 const data = await response.json();
-                // setSeminars(data.data);
-                // Filter out seminars where blocked is true
                 const filteredSeminars = data.data.filter(seminar => seminar.blocked !== true);
                 setSeminars(filteredSeminars);
+                setLoading(false);
             } else {
                 toast.error("Failed to fetch seminars");
             }
@@ -77,10 +77,10 @@ const Seminar = () => {
                     "Authorization": `Bearer ${token}`
                 },
             });
-            if (response.ok) {
-                setLoading(false);
+            if (response.ok) {             
                 const data = await response.json();
                 setGeneralPostingGroups(data.data);
+                setLoading(false);
             } else {
                 toast.error("Failed to fetch general product posting groups");
             }
@@ -106,9 +106,9 @@ const Seminar = () => {
                 },
             });
             if (response.ok) {
-                setLoading(false);
                 const data = await response.json();
                 setVatPostingGroups(data.data);
+                setLoading(false);
             } else {
                 toast.error("Failed to fetch VAT product posting groups");
             }
@@ -152,7 +152,7 @@ const Seminar = () => {
 
     const handleEditSave = async () => {
         try {
-            setLoading( true);
+            setIsEditing( true);
             const token = localStorage.getItem("authToken");
             const response = await fetch(`https://localhost:7232/api/Seminar`, {
                 method: "PATCH",
@@ -171,23 +171,23 @@ const Seminar = () => {
                 }),
             });
             if (response.ok) {
-                setLoading(false);
+                setIsEditing(false);
                 toast.success("Seminar updated successfully!");
                 setEditModalOpen(false);
                 fetchSeminars();
             } else {
-                setLoading(false);
+                setIsEditing(false);
                 toast.error("Failed to update seminar.");
             }
         } catch (error) {
-            setLoading(false);
+            setIsEditing(false);
             toast.error("An error occurred while updating.");
         }
     };
 
     const handleDeleteConfirm = async () => {
         try {
-            setLoading(true);
+            setIsDeleting(true);
             const token = localStorage.getItem("authToken");
             const response = await fetch(`https://localhost:7232/api/Seminar/${selectedSeminar.no}`, {
                 method: "DELETE",
@@ -198,16 +198,16 @@ const Seminar = () => {
                 // body: JSON.stringify({ docNo: selectedSeminar.no }),
             });
             if (response.ok) {
-                setLoading(false);
+                setIsDeleting(false);
                 toast.success("Seminar deleted successfully!");
                 setDeleteModalOpen(false);
                 fetchSeminars();
             } else {
-                setLoading(false);
+                setIsDeleting(false);
                 toast.error("Failed to delete seminar.");
             }
         } catch (error) {
-            setLoading(false);
+            setIsDeleting(false);
             toast.error("An error occurred while deleting.");
         }
     };
@@ -217,23 +217,24 @@ const Seminar = () => {
             <NavBar />
            
             <div className="max-w-4xl mx-auto bg-[#F7FAFC] p-2 rounded-lg shadow-lg">
-                <div className="rounded-none mb-8 flex items-center justify-between gap-8 p-10">
-                    <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                <div className="rounded-none mb-4 flex items-center justify-between gap-8 p-10">
+                    <div className="flex shrink-0 flex-col gap-4 sm:flex-row justify-end w-full">
                         <a href="/seminars/new">
                             <button className="flex items-center gap-3 bg-[#172048] text-[14px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
                                 <BriefcaseIcon strokeWidth={2} className="h-4 w-4" />
                                 Add new seminar
                             </button>
                         </a>
-                    </div>
-                    <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                         <a href="/seminars/registrations">
                             <button className="flex items-center gap-3 bg-[#172048] text-[14px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900">
                                 <UserPlusIcon strokeWidth={2} className="h-4 w-4" />
-                                Registrations
+                                Seminar Registrations
                             </button>
                         </a>
                     </div>
+                    {/* <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                        
+                    </div> */}
                 </div>
                 <table className="w-full table-auto text-left">
                     <thead>
@@ -299,11 +300,19 @@ const Seminar = () => {
                                             </span>
                                         </div>
                                     </td>
+                                    {/* <td className={classes}>
+                                        <button 
+                                            //  onClick={() => handleNewClick(registration)} 
+                                            className="flex items-center gap-1 bg-[#4169e1] text-[12px] text-white font-poppins px-2 py-2 rounded-md hover:bg-blue-900"
+                                        >                                              
+                                            Register Sem
+                                        </button>
+                                    </td> */}
                                     <td className={classes}>
                                         <div className="relative">
                                             <button
                                                 onClick={() => toggleDropdown(index)}
-                                                className="bg-gray-100 rounded-full hover:bg-gray-200"
+                                                className="ml-4 bg-gray-100 rounded-full hover:bg-gray-200"
                                             >
                                                 <EllipsisVerticalIcon className="h-5 w-5 text-gray-700" />
                                             </button>
@@ -321,7 +330,7 @@ const Seminar = () => {
                                                             onClick={() => handleDeleteClick(seminar)}
                                                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer font-poppins font-bold text-[#172048] opacity-70"
                                                         >
-                                                            Delete
+                                                            Delete                                              
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -423,8 +432,8 @@ const Seminar = () => {
                                 </option>
                             ))}
                         </select>
-                        <button onClick={handleEditSave} disabled={loading} className="bg-[#4169e1] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">
-                            {loading ? "Updating..." : "Save"}
+                        <button onClick={handleEditSave} disabled={isEditing} className="bg-[#4169e1] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">
+                            {isEditing ? "Updating..." : "Save"}
                         </button>
                         <button onClick={() => setEditModalOpen(false)} className="ml-5 bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Cancel</button>
                     </div>
@@ -437,8 +446,8 @@ const Seminar = () => {
                     <div className="bg-white p-8 rounded-xl shadow-lg max-w-lg w-full">
                         <h2 className="text-lg font-poppins font-bold mb-4">Confirm Delete</h2>
                         <p className="block mb-2 text-[14px] font-poppins font-medium text-[#718096]">Are you sure you want to delete this seminar?</p>
-                        <button onClick={handleDeleteConfirm} disabled={loading} className="bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">
-                            {loading ? "Deleting..." : "Yes, Delete"}
+                        <button onClick={handleDeleteConfirm} disabled={isDeleting} className="bg-red-500 text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">
+                            {isDeleting ? "Deleting..." : "Yes, Delete"}
                         </button>
                         <button onClick={() => setDeleteModalOpen(false)} className="ml-20 bg-[#718096] text-white font-poppins font-semibold px-5 py-2.5 rounded-[20px]">Cancel</button>
                     </div>
